@@ -280,25 +280,29 @@ def filter_all(config):
     except:
         pose_folder_name = config.get('project').get('pose_folder_name')
     pose_dir = os.path.join(project_dir, pose_folder_name)
+    motion_name = config.get('project').get('motion_name')
+    motion_2d_dir = os.path.join(pose_dir, motion_name)
+    
     json_folder_extension =  config.get('project').get('pose_json_folder_extension')
     frame_range = config.get('project').get('frame_range')
     seq_name = os.path.basename(project_dir)
     pose3d_folder_name = config.get('project').get('pose3d_folder_name')
     pose3d_dir = os.path.join(project_dir, pose3d_folder_name)
+    motion_3d_dir = os.path.join(pose3d_dir, motion_name)
     display_figures = config.get('3d-filtering').get('display_figures')
     filter_type = config.get('3d-filtering').get('type')
 
     # Frames range
-    pose_listdirs_names = next(os.walk(pose_dir))[1]
-    json_dirs_names = [k for k in pose_listdirs_names if json_folder_extension in k]
-    json_files_names = [fnmatch.filter(os.listdir(os.path.join(pose_dir, js_dir)), '*.json') for js_dir in json_dirs_names]
+    json_dirs_names = next(os.walk(motion_2d_dir))[1]
+    # json_dirs_names = [k for k in pose_listdirs_names if json_folder_extension in k]
+    json_files_names = [fnmatch.filter(os.listdir(os.path.join(motion_2d_dir, js_dir)), '*.json') for js_dir in json_dirs_names]
     f_range = [[0,min([len(j) for j in json_files_names])] if frame_range==[] else frame_range][0]
     
     # Trc paths
     trc_f_in = f'{seq_name}_{f_range[0]}-{f_range[1]}.trc'
     trc_f_out = f'{seq_name}_filt_{f_range[0]}-{f_range[1]}.trc'
-    trc_path_in = os.path.join(pose3d_dir, trc_f_in)
-    trc_path_out = os.path.join(pose3d_dir, trc_f_out)
+    trc_path_in = os.path.join(motion_3d_dir, trc_f_in)
+    trc_path_out = os.path.join(motion_3d_dir, trc_f_out)
     
     # Read trc header
     with open(trc_path_in, 'r') as trc_file:

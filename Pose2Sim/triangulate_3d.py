@@ -129,7 +129,9 @@ def make_trc(config, Q, keypoints_names, f_range):
     seq_name = os.path.basename(project_dir)
     pose3d_folder_name = config.get('project').get('pose3d_folder_name')
     pose3d_dir = os.path.join(project_dir, pose3d_folder_name)
-
+    motion_name = config.get('project').get('motion_name')
+    motion_dir = os.path.join(pose3d_dir, motion_name)
+    
     trc_f = f'{seq_name}_{f_range[0]}-{f_range[1]}.trc'
 
     #Header
@@ -150,8 +152,8 @@ def make_trc(config, Q, keypoints_names, f_range):
     Q.insert(0, 't', Q.index / frame_rate)
 
     #Write file
-    if not os.path.exists(pose3d_dir): os.mkdir(pose3d_dir)
-    trc_path = os.path.join(pose3d_dir, trc_f)
+    if not os.path.exists(motion_dir): os.makedirs(motion_dir, exist_ok=True)
+    trc_path = os.path.join(motion_dir, trc_f)
     with open(trc_path, 'w') as trc_o:
         [trc_o.write(line+'\n') for line in header_trc]
         Q.to_csv(trc_o, sep='\t', index=True, header=None, line_terminator='\n')
@@ -393,7 +395,8 @@ def triangulate_all(config):
     likelihood_threshold = config.get('3d-triangulation').get('likelihood_threshold')
     interpolation_kind = config.get('3d-triangulation').get('interpolation')
     show_interp_indices = config.get('3d-triangulation').get('show_interp_indices')
-    pose_dir = os.path.join(project_dir, pose_folder_name)
+    motion_name = config.get('project').get('motion_name')
+    pose_dir = os.path.join(project_dir, pose_folder_name, motion_name)
     poseTracked_folder_name = config.get('project').get('poseTracked_folder_name')
     calib_dir = os.path.join(project_dir, calib_folder_name)
     calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0]
@@ -411,8 +414,8 @@ def triangulate_all(config):
     
     # 2d-pose files selection
     pose_listdirs_names = next(os.walk(pose_dir))[1]
-    pose_listdirs_names = natural_sort(pose_listdirs_names)
-    json_dirs_names = [k for k in pose_listdirs_names if json_folder_extension in k]
+    json_dirs_names = natural_sort(pose_listdirs_names)
+    # json_dirs_names = [k for k in pose_listdirs_names if json_folder_extension in k]
     try: 
         json_files_names = [fnmatch.filter(os.listdir(os.path.join(poseTracked_dir, js_dir)), '*.json') for js_dir in json_dirs_names]
         json_files_names = [natural_sort(j) for j in json_files_names]

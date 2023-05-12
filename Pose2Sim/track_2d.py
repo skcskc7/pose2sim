@@ -248,6 +248,7 @@ def track_2d_all(config):
     tracked_keypoint = config.get('2d-tracking').get('tracked_keypoint')
     json_folder_extension =  config.get('project').get('pose_json_folder_extension')
     frame_range = config.get('project').get('frame_range')
+    motion_name = config.get('project').get('motion_name')
     
     calib_dir = os.path.join(project_dir, calib_folder_name)
     calib_file = glob.glob(os.path.join(calib_dir, '*.toml'))[0]
@@ -262,18 +263,21 @@ def track_2d_all(config):
     tracked_keypoint_id = [node.id for _, _, node in RenderTree(model) if node.name==tracked_keypoint][0]
     
     # 2d-pose files selection
-    pose_listdirs_names = next(os.walk(pose_dir))[1]
-    pose_listdirs_names = natural_sort(pose_listdirs_names)
-    json_dirs_names = [k for k in pose_listdirs_names if json_folder_extension in k]
-    json_files_names = [fnmatch.filter(os.listdir(os.path.join(pose_dir, js_dir)), '*.json') for js_dir in json_dirs_names]
+    motion_dir = os.path.join(pose_dir, motion_name)
+    
+    pose_listdirs_names = next(os.walk(motion_dir))[1]
+    json_dirs_names = natural_sort(pose_listdirs_names)
+    # json_dirs_names = [k for k in pose_listdirs_names if json_folder_extension in k]
+    json_files_names = [fnmatch.filter(os.listdir(os.path.join(motion_dir, js_dir)), '*.json') for js_dir in json_dirs_names]
     json_files_names = [natural_sort(j) for j in json_files_names]
-    json_files = [[os.path.join(pose_dir, j_dir, j_file) for j_file in json_files_names[j]] for j, j_dir in enumerate(json_dirs_names)]
+    json_files = [[os.path.join(motion_dir, j_dir, j_file) for j_file in json_files_names[j]] for j, j_dir in enumerate(json_dirs_names)]
     
     # 2d-pose-tracked files creation
-    if not os.path.exists(poseTracked_dir): os.mkdir(poseTracked_dir)   
-    try: [os.mkdir(os.path.join(poseTracked_dir,k)) for k in json_dirs_names]
+    Tracked_motion_dir = os.path.join(poseTracked_dir, motion_name)
+    if not os.path.exists(Tracked_motion_dir): os.makedirs(Tracked_motion_dir, exist_ok=True)   
+    try: [os.mkdir(os.path.join(Tracked_motion_dir,k)) for k in json_dirs_names]
     except: pass
-    json_tracked_files = [[os.path.join(poseTracked_dir, j_dir, j_file) for j_file in json_files_names[j]] for j, j_dir in enumerate(json_dirs_names)]
+    json_tracked_files = [[os.path.join(Tracked_motion_dir, j_dir, j_file) for j_file in json_files_names[j]] for j, j_dir in enumerate(json_dirs_names)]
     
     # person's tracking
     f_range = [[min([len(j) for j in json_files])] if frame_range==[] else frame_range][0]
