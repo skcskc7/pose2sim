@@ -157,7 +157,7 @@ def draw_limbs_3d(Q, keypoints_names, joint_parents):
     joints_nb = len(keypoints_names)
     
     # yup2zup (convert to Z-up system = opensim coord to matplotlib coord)
-    Q = yup2zup(Q)
+    # Q = yup2zup(Q)
     
     joints_3d = Q.to_numpy()
     joints_3d = joints_3d.reshape(-1, joints_nb, 3) # (frames, joints, xyz)

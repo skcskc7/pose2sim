@@ -22,10 +22,10 @@ opensim_folder_name = 'opensim'
 [openpose]
 openpose_path = 'C:/Code/openpose'
 vid_extension = 'avi'
-model_pose = 'COCO'
+model_pose = 'BODY_25B'
 
 [pose-2d]
-pose_model = 'COCO' #CUSTOM, BODY_25B, BODY_25, BODY_135, BLAZEPOSE, HALPE_26, HALPE_68, HALPE_136, COCO_133, COCO, MPII are available,
+pose_model = 'BODY_25B' #CUSTOM, BODY_25B, BODY_25, BODY_135, BLAZEPOSE, HALPE_26, HALPE_68, HALPE_136, COCO_133, COCO, MPII are available,
 # from DeepLabCut, OpenPose, MediaPipe BlazePose, and AlphaPose
 # See Pose2Sim\skeleton.py for their skeleton hierarchy
 
