@@ -5,8 +5,8 @@
 # Configure your project parameters here
 
 [project]
-project_dir = './data/230512_swing_45deg' # BETWEEN SINGLE QUOTES! # If empty, project dir is current dir
-motion_name = 'swing3'
+project_dir = './data/230511_swing_0deg_opps18' # BETWEEN SINGLE QUOTES! # If empty, project dir is current dir
+motion_name = 'swing1'
 frame_range = [] #For example [10,300], or [] for all frames
 frame_rate = 60 #Hz
 
@@ -22,9 +22,10 @@ opensim_folder_name = 'opensim'
 [openpose]
 openpose_path = 'C:/Code/openpose'
 vid_extension = 'avi'
+model_pose = 'COCO'
 
 [pose-2d]
-pose_model = 'BODY_25B' #CUSTOM, BODY_25B, BODY_25, BODY_135, BLAZEPOSE, HALPE_26, HALPE_68, HALPE_136, COCO_133, COCO, MPII are available,
+pose_model = 'COCO' #CUSTOM, BODY_25B, BODY_25, BODY_135, BLAZEPOSE, HALPE_26, HALPE_68, HALPE_136, COCO_133, COCO, MPII are available,
 # from DeepLabCut, OpenPose, MediaPipe BlazePose, and AlphaPose
 # See Pose2Sim\skeleton.py for their skeleton hierarchy
 

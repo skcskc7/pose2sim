@@ -63,7 +63,7 @@ def trc_Zup_to_Yup_func(*args):
     frames_col, time_col = trc_df.iloc[:,0], trc_df.iloc[:,1]
     Q_coord = trc_df.drop(trc_df.columns[[0, 1]], axis=1)
 
-    # X->Y, Y->Z, Z->X
+    # X->Y, Y->Z, Z->X (=X축이 Y축으로 가고, Y축이 Z축으로 가고, Z축이 X축으로 가는 것)
     cols = list(Q_coord.columns)
     cols = np.array([[cols[i*3+1],cols[i*3+2],cols[i*3]] for i in range(int(len(cols)/3))]).flatten()
     Q_Yup = Q_coord[cols]
